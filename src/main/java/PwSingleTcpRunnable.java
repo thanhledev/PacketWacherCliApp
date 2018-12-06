@@ -27,9 +27,9 @@ public class PwSingleTcpRunnable extends TcpSenderRunnable {
 
             // get memo
             Memo memo = (Memo) inStream.readObject();
-
+            System.out.println(memo.printMemo());
             // add to queue
-            synchronized (mQueue) {
+            /*synchronized (mQueue) {
                 while (mQueue.size() == queueSize) {
                     mQueue.wait();
                 }
@@ -39,15 +39,15 @@ public class PwSingleTcpRunnable extends TcpSenderRunnable {
 
             synchronized (mQueue) {
                 mQueue.notify();
-            }
+            }*/
 
         } catch (IOException e) {
             System.err.println(e.getMessage());
         } catch (ClassNotFoundException e) {
             System.err.println(e.getMessage());
-        } catch (InterruptedException e) {
+        } /*catch (InterruptedException e) {
             System.err.println(e.getMessage());
-        }
+        }*/
     }
 
     @Override

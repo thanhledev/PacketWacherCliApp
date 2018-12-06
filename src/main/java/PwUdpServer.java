@@ -35,9 +35,9 @@ public class PwUdpServer extends UdpSenderRunnable {
 
                 // get memo
                 Memo memo = Lib.arrayToMemo(rPacket.getData());
-
+                System.out.println(memo.printMemo());
                 // add to queue
-                synchronized (mQueue) {
+                /*synchronized (mQueue) {
                     while (mQueue.size() == queueSize) {
                         mQueue.wait();
                     }
@@ -47,11 +47,11 @@ public class PwUdpServer extends UdpSenderRunnable {
 
                 synchronized (mQueue) {
                     mQueue.notify();
-                }
+                }*/
             }
-        } catch (InterruptedException e) {
+        } /*catch (InterruptedException e) {
             System.out.println(e.getMessage());
-        } catch (IOException e) {
+        }*/ catch (IOException e) {
             System.out.println(e.getMessage());
         }
 

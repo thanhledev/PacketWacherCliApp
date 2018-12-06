@@ -21,39 +21,41 @@ public class PwMultipleTcpRunnable extends TcpSenderRunnable {
 
     @Override
     public void run() {
-        current = Thread.currentThread();
-
-        while (true) {
-            try {
-                ObjectInputStream inStream = new ObjectInputStream(new BufferedInputStream(sSocket.getInputStream()));
-
-                // get memo
-                Memo memo = (Memo) inStream.readObject();
-
-                if(memo.getTitle().equals("quit") || memo.getContent().equals("quit")) {
-                    break;
-                }
-
-                // add to queue
-                synchronized (mQueue) {
-                    while (mQueue.size() == queueSize) {
-                        mQueue.wait();
+        try {
+            current = Thread.currentThread();
+            ObjectInputStream inStream = new ObjectInputStream(new BufferedInputStream(sSocket.getInputStream()));
+            int count = 1;
+            while (true) {
+                try {
+                    // get memo
+                    Memo memo = (Memo) inStream.readObject();
+                    if (memo.getTitle().equals("quit") || memo.getContent().equals("quit")) {
+                        break;
+                    } else {
+                        System.out.println(String.format("%s received %d packets.",current.getName(),++count));
                     }
-                }
 
-                mQueue.add(memo);
+                    // add to queue
+                    /*synchronized (mQueue) {
+                        while (mQueue.size() == queueSize) {
+                            mQueue.wait();
+                        }
+                    }
 
-                synchronized (mQueue) {
-                    mQueue.notify();
-                }
+                    mQueue.add(memo);
 
-            } catch (IOException e) {
-                System.err.println(e.getMessage());
-            } catch (ClassNotFoundException e) {
-                System.err.println(e.getMessage());
-            } catch (InterruptedException e) {
-                System.err.println(e.getMessage());
+                    synchronized (mQueue) {
+                        mQueue.notify();
+                    }*/
+
+                } catch (ClassNotFoundException e) {
+                    System.err.println(e.getMessage());
+                } /*catch (InterruptedException e) {
+                    System.err.println(e.getMessage());
+                }*/
             }
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
         }
     }
 

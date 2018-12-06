@@ -20,7 +20,7 @@ public class Main {
     private static Option option;
 
     private static Queue memoQueue;
-    private static final int queueSize = 100;
+    private static final int queueSize = 5000;
 
     // threads
     private static Thread serverThread;
@@ -81,7 +81,7 @@ public class Main {
                 .help("Server port number (required in client mode)");
 
         argumentParser.addArgument("-ps", "--packetsent")
-                .dest("type")
+                .dest("packetSent")
                 .required(false)
                 .type(Integer.class)
                 .setDefault(10)
@@ -138,7 +138,8 @@ public class Main {
                 serverThread.start();
 
             } else {
-                udpSocket = new DatagramSocket(option.listenPort, InetAddress.getByName("25.16.167.171"));
+                // can add the actual interface here InetAddress.getByName("25.16.167.171")
+                udpSocket = new DatagramSocket(option.listenPort);
 
                 // create server thread
                 serverThread = new Thread(new PwUdpServer(udpSocket, memoQueue, queueSize));
@@ -147,7 +148,7 @@ public class Main {
             }
 
             // wait & print receiving memo
-            while (true) {
+            /*while (true) {
                 synchronized (memoQueue) {
                     while (memoQueue.isEmpty()) {
                         memoQueue.wait();
@@ -155,19 +156,24 @@ public class Main {
                 }
 
                 Memo memo = (Memo) memoQueue.poll();
-                System.out.println(memo.printMemo());
+                if(memo != null)
+                    System.out.println(memo.printMemo());
+                else
+                    System.out.println("NULL VALUE ????");
 
                 synchronized (memoQueue) {
                     memoQueue.notify();
                 }
-            }
+            }*/
+
+            System.in.read();
         } catch (SocketException e) {
             System.err.println(e.getMessage());
         } catch (IOException e) {
             System.err.println(e.getMessage());
-        } catch (InterruptedException e) {
+        } /*catch (InterruptedException e) {
             System.err.println(e.getMessage());
-        }
+        }*/
     }
 
     private static void tcpServerRunnableTask() {
@@ -318,7 +324,8 @@ public class Main {
             System.out.println(String.format("Sending %s packet#%d - Remain:%d", option.protocol,
                     i, option.packetSent - i));
 
-            Memo memo = new Memo(lorem.getWords(3,7),lorem.getWords(6,15));
+            Memo memo = new Memo(String.format("Packet %d", i),
+                    String.format("Content of packet %d", i));
 
             // send tcp packet
             out.writeObject(memo);
@@ -327,7 +334,7 @@ public class Main {
             System.out.println("Send " + option.protocol + " packet to " + option.serverIp + ":" +
                     option.serverPort + " successfully!");
 
-            Thread.sleep(4);
+            Thread.sleep(100);
         }
 
         // send closed packet
@@ -361,7 +368,7 @@ public class Main {
             System.out.println("Send " + option.protocol + " packet to " + option.serverIp + ":" +
                     option.serverPort + " successfully!");
 
-            Thread.sleep(4);
+            Thread.sleep(100);
         }
 
         // close socket
