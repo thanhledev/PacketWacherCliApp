@@ -21,4 +21,7 @@ public class Option {
 
     @Arg(dest = "packetSent")
     public int packetSent;
+
+    @Arg(dest = "maximumDelay")
+    public int maximumDelay;
 }

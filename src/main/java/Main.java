@@ -85,7 +85,14 @@ public class Main {
                 .required(false)
                 .type(Integer.class)
                 .setDefault(10)
-                .help("Please choose how many packets you want to send out.");
+                .help("Please choose how many packets you want to send out (required in client + auto mode).");
+
+        argumentParser.addArgument("-d", "--delay")
+                .dest("packetSent")
+                .required(false)
+                .type(Integer.class)
+                .setDefault(10)
+                .help("Please choose maximum delay between 2 consecutive outgoing packets (required in client + auto mode).");
 
         argumentParser.addArgument("-v", "--verbose")
                 .dest("verbose")
