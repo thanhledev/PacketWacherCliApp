@@ -23,8 +23,8 @@ PacketWacher Command line app
 -m client -t auto -p tcp/udp -si 192.168.1.29 -sp 10000 -ps 50000 -d 200
 ```
 
-4. TCP/UDP client, mode manual, server listening at 192.168.1.29 (depends on each network configuration) port 10000, sending out 50000 packets with maximum sending delay of 200ms -d 200
+4. TCP/UDP client, mode manual, server listening at 192.168.1.29 (depends on each network configuration) port 10000, send outgoing packet one by one manually.
 
 ```
--m client -t manual -p tcp/udp -si 192.168.1.29 -sp 10000 -ps 50000 -d 200
+-m client -t manual -p tcp/udp -si 192.168.1.29 -sp 10000
 ```
